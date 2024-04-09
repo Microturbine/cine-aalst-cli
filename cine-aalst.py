@@ -79,13 +79,15 @@ def print_movie(movie, schedules, cinemas, screens):
     description = movie.get('description', '')
     if description:
         description = re.sub('<[^<]+?>', '', description)
-    print(f"  - \033[1mDescription:\033[0m {description}")
-    
+        print(f"  - \033[1mDescription:\033[0m {description}")
     print(f"  - \033[1mDirector:\033[0m {movie['director']}")
-    print(f"  - \033[1mActors:\033[0m {movie['actors']}")
+    if movie['actors'] != None:
+        print(f"  - \033[1mActors:\033[0m {movie['actors']}")
     print(f"  - \033[1mPoster:\033[0m \x1B]8;;https://cine-aalst.be{movie['poster']}\x1B\\Link\x1B]8;;\x1B\\")
     print(f"  - \033[1mTrailer:\033[0m \x1B]8;;https:{movie['trailer']}\x1B\\Link\x1B]8;;\x1B\\")
     print(f"  - \033[1mRuntime:\033[0m {movie['runtime']} minutes")
+    if movie['nation'] != None:
+        print(f"  - \033[1mNation:\033[0m {movie['nation']}")
     release_date = datetime.fromisoformat(movie['release'].split('+')[0])
     print(f"  - \033[1mRelease Date:\033[0m {release_date.strftime('%Y-%m-%d')}")
     print("  - \033[1mSchedules:\033[0m")
