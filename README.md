@@ -1,7 +1,9 @@
 # CineAalstCLI
 
 CineAalstCLI is a command-line interface tool that allows users to view movie schedules and details for Cine Aalst cinema in Aalst.
+
 It provides a simple way to check the movie schedules for today, tomorrow, or a specific date, search for movies by title, and get detailed information about a specific movie.
+
 You can get a direct link to book tickets or get more information.
 
 ## Disclaimer
@@ -16,8 +18,6 @@ The tool is intended for personal use only, and the author does not take any res
 - View movie schedules for today, tomorrow, or a specific date.
 - Search for movies by title.
 - Get detailed information about a specific movie.
-- Filter movies by warnings (e.g., age ratings, content advisories).
-- Option to view a simple bulleted list of all movie titles.
 
 ## Installation
 
