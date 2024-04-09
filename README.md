@@ -19,6 +19,8 @@ The tool is intended for personal use only, and the author does not take any res
 - Search for movies by title.
 - Get detailed information about a specific movie.
 
+Missing feature: Search for Special Events.
+
 ## Installation
 
 1. Install dependencies:
