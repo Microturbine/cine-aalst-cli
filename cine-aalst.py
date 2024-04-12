@@ -93,9 +93,7 @@ def print_movie(movie, schedules, cinemas, screens):
     print(
         f"  - \033[1mPoster:\033[0m \x1B]8;;https://cine-aalst.be{movie['poster']}\x1B\\Link\x1B]8;;\x1B\\"
     )
-    print(
-        f"  - \033[1mTrailer:\033[0m \x1B]8;;https:{movie['trailer']}\x1B\\Link\x1B]8;;\x1B\\"
-    )
+    print(f"  - \033[1mTrailer:\033[0m \x1B]8;;https:{movie['trailer']}\x1B\\Link\x1B]8;;\x1B\\")
     print(f"  - \033[1mRuntime:\033[0m {movie['runtime']} minutes")
     if movie["nation"] is not None:
         print(f"  - \033[1mNation:\033[0m {movie['nation']}")
@@ -106,17 +104,15 @@ def print_movie(movie, schedules, cinemas, screens):
         start_time = datetime.fromisoformat(schedule["start"].split("+")[0])
         cinema_details = get_cinema_details(cinemas, schedule["cinema_id"])
         screen_details = get_screen_details(screens, schedule["screen_id"])
-        accessibility = (
-            "♿️" if screen_details and screen_details["accessible_disabled"] else ""
-        )
+        accessibility = "♿️" if screen_details and screen_details["accessible_disabled"] else ""
         mask_emoji = (
-            "😷"
-            if screen_details and screen_details["config"]["social_distancing_enabled"]
-            else ""
+            "😷" if screen_details and screen_details["config"]["social_distancing_enabled"] else ""
         )
         ticket_link = f"https://cine-aalst.be/nl/buy/tickets/{schedule['id']}"
         cinema_name = cinema_details["name"]
-        cinema_address = f"{cinema_details['address']['address1']}, {cinema_details['address']['city']}"
+        cinema_address = (
+            f"{cinema_details['address']['address1']}, {cinema_details['address']['city']}"
+        )
         zaal_name = screen_details["name"]
         print(
             f"    - {start_time.strftime('%A, %d %B %H:%M')}{accessibility}{mask_emoji} - {zaal_name} ({cinema_name}, {cinema_address}) - \x1B]8;;{ticket_link}\x1B\\Tickets\x1B]8;;\x1B\\"
@@ -129,9 +125,7 @@ def print_movies_by_date(movies, schedules, cinemas, screens, target_date):
     if target_date is None:
         print("\033[1mMovies and Schedules for all dates:\033[0m")
     else:
-        print(
-            f"\033[1mMovies and Schedules for {target_date.strftime('%Y-%m-%d')}:\033[0m"
-        )
+        print(f"\033[1mMovies and Schedules for {target_date.strftime('%Y-%m-%d')}:\033[0m")
     aggregated_schedules = aggregate_schedules_by_movie(schedules)
     for movie_id, movie_schedules in aggregated_schedules.items():
         for movie in movies:
@@ -141,16 +135,12 @@ def print_movies_by_date(movies, schedules, cinemas, screens, target_date):
 
 
 def print_movies_by_title(search_query, movies, schedules, cinemas, screens):
-    matching_movies = [
-        movie for movie in movies if search_query.lower() in movie["title"].lower()
-    ]
+    matching_movies = [movie for movie in movies if search_query.lower() in movie["title"].lower()]
     if matching_movies:
         print(f"\033[1mMovies matching '{search_query}':\033[0m")
         for movie in matching_movies:
             movie_schedules = [
-                schedule
-                for schedule in schedules
-                if schedule["movie_id"] == movie["id"]
+                schedule for schedule in schedules if schedule["movie_id"] == movie["id"]
             ]
             print_movie(movie, movie_schedules, cinemas, screens)
     else:
