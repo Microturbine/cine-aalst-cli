@@ -91,8 +91,7 @@ def print_movie(movie, schedules, cinemas, screens):
     if movie["actors"] is not None:
         print(f"  - \033[1mActors:\033[0m {movie['actors']}")
     print(
-        f"  - \033[1mPoster:\033[0m \x1B]8;;https://cine-aalst.be{
-            movie['poster']}\x1B\\Link\x1B]8;;\x1B\\"
+        f"  - \033[1mPoster:\033[0m \x1B]8;;https://cine-aalst.be{movie['poster']}\x1B\\Link\x1B]8;;\x1B\\"
     )
     print(
         f"  - \033[1mTrailer:\033[0m \x1B]8;;https:{movie['trailer']}\x1B\\Link\x1B]8;;\x1B\\")
