@@ -1,8 +1,9 @@
-import requests
-import re
-import json
-from datetime import datetime, timedelta
 import argparse
+import json
+import re
+from datetime import datetime, timedelta
+
+import requests
 
 # Dictionary to map warning options to emojis
 warning_emojis = {
