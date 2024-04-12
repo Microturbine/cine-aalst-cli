@@ -113,13 +113,11 @@ def print_movie(movie, schedules, cinemas, screens):
         ticket_link = f"https://cine-aalst.be/nl/buy/tickets/{schedule['id']}"
         cinema_name = cinema_details["name"]
         cinema_address = (
-            f"{cinema_details['address']['address1']}, {
-                cinema_details['address']['city']}"
+            f"{cinema_details['address']['address1']}, {cinema_details['address']['city']}"
         )
         zaal_name = screen_details["name"]
         print(
-            f"    - {start_time.strftime('%A, %d %B %H:%M')}{accessibility}{mask_emoji} - {zaal_name} ({
-                cinema_name}, {cinema_address}) - \x1B]8;;{ticket_link}\x1B\\Tickets\x1B]8;;\x1B\\"
+            f"    - {start_time.strftime('%A, %d %B %H:%M')}{accessibility}{mask_emoji} - {zaal_name} ({cinema_name}, {cinema_address}) - \x1B]8;;{ticket_link}\x1B\\Tickets\x1B]8;;\x1B\\"
         )
 
     print("---")
@@ -129,8 +127,7 @@ def print_movies_by_date(movies, schedules, cinemas, screens, target_date):
     if target_date is None:
         print("\033[1mMovies and Schedules for all dates:\033[0m")
     else:
-        print(f"\033[1mMovies and Schedules for {
-              target_date.strftime('%Y-%m-%d')}:\033[0m")
+        print(f"\033[1mMovies and Schedules for {target_date.strftime('%Y-%m-%d')}:\033[0m")
     aggregated_schedules = aggregate_schedules_by_movie(schedules)
     for movie_id, movie_schedules in aggregated_schedules.items():
         for movie in movies:
