@@ -24,21 +24,27 @@ warning_emojis = {
 
 def get_movies_and_schedules():
     url = "https://cine-aalst.be/nl/movies/today"
-    response = requests.get(url)
-    content = response.text
-    pattern = r'<script id="storeData">window.storeData =(.+?);<\/script>'
-    match = re.search(pattern, content)
+    timeout = 5  # Set a timeout in seconds (adjust as needed)
 
-    if match:
-        json_data = match.group(1)
-        data = json.loads(json_data)
-        movies = data.get("movies", [])
-        schedules = data.get("schedules", [])
-        cinemas = data.get("cinemas", [])
-        screens = data.get("screens", [])
-        return movies, schedules, cinemas, screens
-    else:
-        print("JSON data not found.")
+    try:
+        response = requests.get(url, timeout=timeout)
+        content = response.text
+        pattern = r'<script id="storeData">window.storeData =(.+?);<\/script>'
+        match = re.search(pattern, content)
+
+        if match:
+            json_data = match.group(1)
+            data = json.loads(json_data)
+            movies = data.get("movies", [])
+            schedules = data.get("schedules", [])
+            cinemas = data.get("cinemas", [])
+            screens = data.get("screens", [])
+            return movies, schedules, cinemas, screens
+        else:
+            print("JSON data not found.")
+            return [], [], [], []
+    except requests.exceptions.Timeout:
+        print("Request timed out. Please check the internet connection.")
         return [], [], [], []
 
 
@@ -157,10 +163,11 @@ def parse_date(date_str):
         return datetime.today().date() + timedelta(days=1)
     try:
         return datetime.strptime(date_str, "%Y-%m-%d").date()
-    except ValueError:
+    except ValueError as exc:
+        # Re-raise with context for a more informative error message
         raise argparse.ArgumentTypeError(
             "Invalid date format. Please use YYYY-MM-DD, 'today' or 'tomorrow'."
-        )
+        ) from exc
 
 
 def main():
