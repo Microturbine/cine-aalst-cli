@@ -4,12 +4,15 @@ Setup file to package this tool
 
 from setuptools import setup, find_packages
 
+with open("README.md", encoding="utf-8") as f:
+    long_description = f.read()
+
 setup(
     name="cine_aalst_cli",
     version="0.1.0",
     author="vdmkenny",
     description="View movie schedules for Ciné Aalst",
-    long_description=open("README.md").read(),
+    long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/vdmkenny/cine-aalst-cli",
     packages=find_packages(),
