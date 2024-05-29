@@ -114,9 +114,7 @@ def print_movie(movie, schedules, cinemas, screens):
     print(
         f"  - \033[1mPoster:\033[0m \x1B]8;;https://cine-aalst.be{movie['poster']}\x1B\\Link\x1B]8;;\x1B\\"
     )
-    print(
-        f"  - \033[1mTrailer:\033[0m \x1B]8;;https:{movie['trailer']}\x1B\\Link\x1B]8;;\x1B\\"
-    )
+    print(f"  - \033[1mTrailer:\033[0m \x1B]8;;https:{movie['trailer']}\x1B\\Link\x1B]8;;\x1B\\")
     print(f"  - \033[1mRuntime:\033[0m {movie['runtime']} minutes")
     if movie["nation"] is not None:
         print(f"  - \033[1mNation:\033[0m {movie['nation']}")
@@ -127,9 +125,7 @@ def print_movie(movie, schedules, cinemas, screens):
         start_time = datetime.fromisoformat(schedule["start"].split("+")[0])
         cinema_details = get_cinema_details(cinemas, schedule["cinema_id"])
         screen_details = get_screen_details(screens, schedule["screen_id"])
-        accessibility = (
-            "♿️" if screen_details and screen_details["accessible_disabled"] else ""
-        )
+        accessibility = "♿️" if screen_details and screen_details["accessible_disabled"] else ""
         mask_emoji = (
             "😷" if screen_details and screen_details["config"]["social_distancing_enabled"] else ""
         )
@@ -232,4 +228,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
