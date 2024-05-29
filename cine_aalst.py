@@ -93,14 +93,12 @@ def print_movie(movie, schedules, cinemas, screens):
     print(
         f"  - \033[1mPoster:\033[0m \x1B]8;;https://cine-aalst.be{movie['poster']}\x1B\\Link\x1B]8;;\x1B\\"
     )
-    print(
-        f"  - \033[1mTrailer:\033[0m \x1B]8;;https:{movie['trailer']}\x1B\\Link\x1B]8;;\x1B\\")
+    print(f"  - \033[1mTrailer:\033[0m \x1B]8;;https:{movie['trailer']}\x1B\\Link\x1B]8;;\x1B\\")
     print(f"  - \033[1mRuntime:\033[0m {movie['runtime']} minutes")
     if movie["nation"] is not None:
         print(f"  - \033[1mNation:\033[0m {movie['nation']}")
     release_date = datetime.fromisoformat(movie["release"].split("+")[0])
-    print(
-        f"  - \033[1mRelease Date:\033[0m {release_date.strftime('%Y-%m-%d')}")
+    print(f"  - \033[1mRelease Date:\033[0m {release_date.strftime('%Y-%m-%d')}")
     print("  - \033[1mSchedules:\033[0m")
     for schedule in schedules:
         start_time = datetime.fromisoformat(schedule["start"].split("+")[0])
@@ -137,8 +135,7 @@ def print_movies_by_date(movies, schedules, cinemas, screens, target_date):
 
 
 def print_movies_by_title(search_query, movies, schedules, cinemas, screens):
-    matching_movies = [
-        movie for movie in movies if search_query.lower() in movie["title"].lower()]
+    matching_movies = [movie for movie in movies if search_query.lower() in movie["title"].lower()]
     if matching_movies:
         print(f"\033[1mMovies matching '{search_query}':\033[0m")
         for movie in matching_movies:
@@ -160,12 +157,11 @@ def parse_date(date_str):
     except ValueError as exc:
         raise argparse.ArgumentTypeError(
             "Invalid date format. Please use YYYY-MM-DD, 'today' or 'tomorrow'."
-            ) from exc
+        ) from exc
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Get movie schedules for Cine Aalst.")
+    parser = argparse.ArgumentParser(description="Get movie schedules for Cine Aalst.")
     parser.add_argument(
         "-d",
         "--date",
@@ -188,12 +184,7 @@ def main():
             filtered_schedules = filter_schedules_by_date(schedules, args.date)
         else:
             filtered_schedules = schedules  # All schedules
-        print_movies_by_title(
-            args.movie,
-            movies,
-            filtered_schedules,
-            cinemas,
-            screens)
+        print_movies_by_title(args.movie, movies, filtered_schedules, cinemas, screens)
     else:
         if args.date == "today":
             args.date = datetime.today().date()
@@ -202,12 +193,7 @@ def main():
             filtered_schedules = filter_schedules_by_date(schedules, args.date)
         else:
             filtered_schedules = schedules  # All schedules
-        print_movies_by_date(
-            movies,
-            filtered_schedules,
-            cinemas,
-            screens,
-            args.date)
+        print_movies_by_date(movies, filtered_schedules, cinemas, screens, args.date)
 
 
 if __name__ == "__main__":
