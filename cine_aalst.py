@@ -1,3 +1,7 @@
+"""
+Cine Aalst CLI tool to fetch and display movie schedules.
+"""
+
 import argparse
 import json
 import re
@@ -23,6 +27,9 @@ warning_emojis = {
 
 
 def get_movies_and_schedules():
+    """
+    Fetches the movie and schedule data from the Cine Aalst website.
+    """
     url = "https://cine-aalst.be/nl/movies/today"
     response = requests.get(url)
     content = response.text
@@ -37,12 +44,15 @@ def get_movies_and_schedules():
         cinemas = data.get("cinemas", [])
         screens = data.get("screens", [])
         return movies, schedules, cinemas, screens
-    else:
-        print("JSON data not found.")
-        return [], [], [], []
+
+    print("JSON data not found.")
+    return [], [], [], []
 
 
 def filter_schedules_by_date(schedules, target_date):
+    """
+    Filters the schedules by the target date.
+    """
     filtered_schedules = []
     for schedule in schedules:
         start_time = datetime.fromisoformat(schedule["start"].split("+")[0])
@@ -52,6 +62,9 @@ def filter_schedules_by_date(schedules, target_date):
 
 
 def aggregate_schedules_by_movie(schedules):
+    """
+    Aggregates schedules by movie ID.
+    """
     aggregated_schedules = {}
     for schedule in schedules:
         movie_id = schedule["movie_id"]
@@ -62,6 +75,9 @@ def aggregate_schedules_by_movie(schedules):
 
 
 def get_cinema_details(cinemas, cinema_id):
+    """
+    Retrieves details of a cinema by its ID.
+    """
     for cinema in cinemas:
         if cinema["id"] == cinema_id:
             return cinema
@@ -69,6 +85,9 @@ def get_cinema_details(cinemas, cinema_id):
 
 
 def get_screen_details(screens, screen_id):
+    """
+    Retrieves details of a screen by its ID.
+    """
     for screen in screens:
         if screen["id"] == screen_id:
             return screen
@@ -76,13 +95,15 @@ def get_screen_details(screens, screen_id):
 
 
 def print_movie(movie, schedules, cinemas, screens):
+    """
+    Prints the details of a movie along with its schedules.
+    """
     movie_name = movie["title"]
     options = movie.get("options", [])
     warning_symbols = [warning_emojis.get(option, "") for option in options]
     print(f"\033[94m{movie_name}\033[0m:")
     print(f"  - \033[1mWarnings:\033[0m {', '.join(warning_symbols)}")
 
-    # Check if description exists before removing HTML tags
     description = movie.get("description", "")
     if description:
         description = re.sub("<[^<]+?>", "", description)
@@ -93,7 +114,9 @@ def print_movie(movie, schedules, cinemas, screens):
     print(
         f"  - \033[1mPoster:\033[0m \x1B]8;;https://cine-aalst.be{movie['poster']}\x1B\\Link\x1B]8;;\x1B\\"
     )
-    print(f"  - \033[1mTrailer:\033[0m \x1B]8;;https:{movie['trailer']}\x1B\\Link\x1B]8;;\x1B\\")
+    print(
+        f"  - \033[1mTrailer:\033[0m \x1B]8;;https:{movie['trailer']}\x1B\\Link\x1B]8;;\x1B\\"
+    )
     print(f"  - \033[1mRuntime:\033[0m {movie['runtime']} minutes")
     if movie["nation"] is not None:
         print(f"  - \033[1mNation:\033[0m {movie['nation']}")
@@ -104,7 +127,9 @@ def print_movie(movie, schedules, cinemas, screens):
         start_time = datetime.fromisoformat(schedule["start"].split("+")[0])
         cinema_details = get_cinema_details(cinemas, schedule["cinema_id"])
         screen_details = get_screen_details(screens, schedule["screen_id"])
-        accessibility = "♿️" if screen_details and screen_details["accessible_disabled"] else ""
+        accessibility = (
+            "♿️" if screen_details and screen_details["accessible_disabled"] else ""
+        )
         mask_emoji = (
             "😷" if screen_details and screen_details["config"]["social_distancing_enabled"] else ""
         )
@@ -115,13 +140,18 @@ def print_movie(movie, schedules, cinemas, screens):
         )
         zaal_name = screen_details["name"]
         print(
-            f"    - {start_time.strftime('%A, %d %B %H:%M')}{accessibility}{mask_emoji} - {zaal_name} ({cinema_name}, {cinema_address}) - \x1B]8;;{ticket_link}\x1B\\Tickets\x1B]8;;\x1B\\"
+            f"    - {start_time.strftime('%A, %d %B %H:%M')}{accessibility}{mask_emoji} - "
+            f"{zaal_name} ({cinema_name}, {cinema_address}) - "
+            f"\x1B]8;;{ticket_link}\x1B\\Tickets\x1B]8;;\x1B\\"
         )
 
     print("---")
 
 
 def print_movies_by_date(movies, schedules, cinemas, screens, target_date):
+    """
+    Prints movies and schedules for a specific date or all dates.
+    """
     if target_date is None:
         print("\033[1mMovies and Schedules for all dates:\033[0m")
     else:
@@ -135,6 +165,9 @@ def print_movies_by_date(movies, schedules, cinemas, screens, target_date):
 
 
 def print_movies_by_title(search_query, movies, schedules, cinemas, screens):
+    """
+    Prints movies and schedules that match a given search query.
+    """
     matching_movies = [movie for movie in movies if search_query.lower() in movie["title"].lower()]
     if matching_movies:
         print(f"\033[1mMovies matching '{search_query}':\033[0m")
@@ -148,6 +181,9 @@ def print_movies_by_title(search_query, movies, schedules, cinemas, screens):
 
 
 def parse_date(date_str):
+    """
+    Parses a date string into a date object.
+    """
     if date_str == "today":
         return datetime.today().date()
     if date_str == "tomorrow":
@@ -161,6 +197,9 @@ def parse_date(date_str):
 
 
 def main():
+    """
+    Main function to parse arguments and print movie schedules.
+    """
     parser = argparse.ArgumentParser(description="Get movie schedules for Cine Aalst.")
     parser.add_argument(
         "-d",
@@ -176,19 +215,14 @@ def main():
     )
     args = parser.parse_args()
 
+    movies, schedules, cinemas, screens = get_movies_and_schedules()
     if args.movie:
-        if args.date == "today":
-            args.date = datetime.today().date()
-        movies, schedules, cinemas, screens = get_movies_and_schedules()
         if args.date:
             filtered_schedules = filter_schedules_by_date(schedules, args.date)
         else:
             filtered_schedules = schedules  # All schedules
         print_movies_by_title(args.movie, movies, filtered_schedules, cinemas, screens)
     else:
-        if args.date == "today":
-            args.date = datetime.today().date()
-        movies, schedules, cinemas, screens = get_movies_and_schedules()
         if args.date:
             filtered_schedules = filter_schedules_by_date(schedules, args.date)
         else:
@@ -198,3 +232,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
