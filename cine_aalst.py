@@ -108,6 +108,18 @@ def print_movie(movie, schedules, cinemas, screens):
     if description:
         description = re.sub("<[^<]+?>", "", description)
         print(f"  - \033[1mDescription:\033[0m {description}")
+
+    # Print movie details
+    print_movie_details(movie)
+
+    # Print schedules
+    print_schedules(schedules, cinemas, screens)
+
+
+def print_movie_details(movie):
+    """
+    Prints movie details.
+    """
     print(f"  - \033[1mDirector:\033[0m {movie['director']}")
     if movie["actors"] is not None:
         print(f"  - \033[1mActors:\033[0m {movie['actors']}")
@@ -120,6 +132,12 @@ def print_movie(movie, schedules, cinemas, screens):
         print(f"  - \033[1mNation:\033[0m {movie['nation']}")
     release_date = datetime.fromisoformat(movie["release"].split("+")[0])
     print(f"  - \033[1mRelease Date:\033[0m {release_date.strftime('%Y-%m-%d')}")
+
+
+def print_schedules(schedules, cinemas, screens):
+    """
+    Prints movie schedules.
+    """
     print("  - \033[1mSchedules:\033[0m")
     for schedule in schedules:
         start_time = datetime.fromisoformat(schedule["start"].split("+")[0])
@@ -137,10 +155,8 @@ def print_movie(movie, schedules, cinemas, screens):
         zaal_name = screen_details["name"]
         print(
             f"    - {start_time.strftime('%A, %d %B %H:%M')}{accessibility}{mask_emoji} - "
-            f"{zaal_name} ({cinema_name}, {cinema_address}) - "
-            f"\x1B]8;;{ticket_link}\x1B\\Tickets\x1B]8;;\x1B\\"
+            f"{zaal_name} ({cinema_name}, {cinema_address}) - \x1B]8;;{ticket_link}\x1B\\Tickets\x1B]8;;\x1B\\"
         )
-
     print("---")
 
 
