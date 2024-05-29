@@ -157,10 +157,10 @@ def parse_date(date_str):
         return datetime.today().date() + timedelta(days=1)
     try:
         return datetime.strptime(date_str, "%Y-%m-%d").date()
-    except ValueError:
+    except ValueError as exc:
         raise argparse.ArgumentTypeError(
             "Invalid date format. Please use YYYY-MM-DD, 'today' or 'tomorrow'."
-        )
+            ) from exc
 
 
 def main():
