@@ -43,18 +43,18 @@ These options can be combined.
 
 ```bash
 # Show movie schedules for today
-python cine-aalst.py -d today
+python cine_aalst.py -d today
 
 # Show movie schedules for tomorrow
-python cine-aalst.py -d tomorrow
+python cine_aalst.py -d tomorrow
 
 # Show movie schedules for a specific date (Schedules are available for the next 7 days or so)
-python cine-aalst.py -d 2024-04-12
+python cine_aalst.py -d 2024-04-12
 
 # Search for a movie by title (Partial matches are also supported)
-python cine-aalst.py -m "Kung Fu Panda"
+python cine_aalst.py -m "Kung Fu Panda"
 
 # Search for a specific movie on a specific date
-python cine-aalst.py -d 2024-04-12 -m "Kung Fu Panda"
+python cine_aalst.py -d 2024-04-12 -m "Kung Fu Panda"
 
 ```
