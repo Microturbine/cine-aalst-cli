@@ -24,7 +24,7 @@ warning_emojis = {
 
 def get_movies_and_schedules():
     url = "https://cine-aalst.be/nl/movies/today"
-    timeout = 5  # Set a timeout in seconds (adjust as needed)
+    timeout = 10
 
     try:
         response = requests.get(url, timeout=timeout)
@@ -164,7 +164,6 @@ def parse_date(date_str):
     try:
         return datetime.strptime(date_str, "%Y-%m-%d").date()
     except ValueError as exc:
-        # Re-raise with context for a more informative error message
         raise argparse.ArgumentTypeError(
             "Invalid date format. Please use YYYY-MM-DD, 'today' or 'tomorrow'."
         ) from exc
